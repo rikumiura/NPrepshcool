@@ -1,7 +1,8 @@
 'use strict';
 const userNameInput = document.getElementById('user-name');
 const assessmentButton = document.getElementById('assessment')
-const resultDivided = document.getElementById('tweet-area');
+const resultDivided = document.getElementById('result-area');
+const tweetDivided = document.getElementById('tweet-area');
 const answers = [
         '{userName}のいいところは声です。{userName}の特徴的な声は皆を惹きつけ、心に残ります。',
         '{userName}のいいところはまなざしです。{userName}に見つめられた人は、気になって仕方がないでしょう。',
@@ -61,7 +62,29 @@ assessmentButton.onclick = () => {
         paragraph.innerText = result;
         resultDivided.appendChild(paragraph);
         //ToDo ツイートエリアの作成
+        removeAllChildren(tweetDivided);
+        const anchor = document.createElement('a');
+        const hrefValue =
+                'https://twitter.com/intent/tweet?button_hashtag=' +
+                encodeURIComponent('あなたのいいところ') +
+                '&ref_src=twsrc%5Etfw';
+        anchor.setAttribute('href', hrefValue);
+        anchor.className = 'twitter-hashtag-button';
+        anchor.setAttribute('data-text', result);
+        anchor.innerText = 'Tweet #あなたのいいところ';
+        tweetDivided.appendChild(anchor);
 
+        // widgets.js の設定
+        const script = document.createElement('script');
+        script.setAttribute('src', 'https://platform.twitter.com/widgets.js');
+        tweetDivided.appendChild(script);
+};
+
+userNameInput.onkeydown = event => {
+        if (event.key === 'Enter') {
+                // TODO ボタンのonclick() 処理を呼び出す
+                assessmentButton.onclick();
+        }
 };
 
 /**
